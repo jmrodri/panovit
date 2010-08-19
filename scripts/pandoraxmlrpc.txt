@@ -1,0 +1,13 @@
+HOST=www.pandora.com
+RPC_PATH="/radio/xmlrpc/v27?"
+methodname=listener.authenticateListener
+int = time
+string = username
+string = password
+url=RPC_PATH?rid=routeid&method=authenticateListener
+
+methodName=station.getStations
+int=time
+string=authtoken
+url=RPC_PATH?rid=routeid&lid=listenerid&method=getStations
+
