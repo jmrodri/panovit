@@ -4,8 +4,12 @@ import com.tivo.hme.bananas.BApplication;
 import com.tivo.hme.bananas.BScreen;
 import com.tivo.hme.bananas.BView;
 import com.tivo.hme.sdk.HmeEvent;
+import com.zeusville.panovit.pianobar.Callback;
+import com.zeusville.panovit.pianobar.EventType;
 
-public class MainScreen extends BScreen {
+import java.util.List;
+
+public class MainScreen extends BScreen implements Callback {
     
     private StationList stations;
     private NewStationScreen nss;
@@ -17,8 +21,8 @@ public class MainScreen extends BScreen {
         stations = new StationList(getNormal(), SAFE_TITLE_H+10, (getHeight()-SAFE_TITLE_V)-290, 300, 280, 35);
 
         stations.add("Create New Station...");
-        stations.add("Timbaland Radio");
-        stations.add("Lords of Acid Radio");
+//        stations.add("Timbaland Radio");
+//        stations.add("Lords of Acid Radio");
         setFocusDefault(stations);
         nss = new NewStationScreen(getBApp());
         player = new PlayerScreen(getBApp());
@@ -95,5 +99,27 @@ public class MainScreen extends BScreen {
                 break;
         }
         return super.handleEvent(event);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void callback(EventType type, Object data) {
+        switch(type) {
+        case STATIONADD:
+            List<String> stations = (List<String>) data;
+            for (String station : stations) {
+                this.stations.add(station);
+            }
+            break;
+        case STATIONCREATE:
+            this.stations.add((String) data);
+            break;
+        case STATIONDELETE:
+            this.stations.remove((String) data);
+            break;
+            
+        case SONGSTART:
+            //player
+            break;
+        }
     }
 }

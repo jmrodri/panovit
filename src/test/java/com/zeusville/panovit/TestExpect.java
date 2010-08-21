@@ -1,6 +1,7 @@
 package com.zeusville.panovit;
 
 import com.zeusville.panovit.pianobar.Pianobar;
+import com.zeusville.panovit.pianobar.PianobarControl;
 
 import expectj.ExpectJ;
 import expectj.Spawn;
@@ -9,7 +10,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 
 public class TestExpect {
@@ -29,20 +29,17 @@ public class TestExpect {
     
     @Test
     public void usePianobar() throws FileNotFoundException, InterruptedException {
-        PrintWriter ctlfile = new PrintWriter(new File("/home/jesusr/.config/pianobar/ctl"));
-        Pianobar pb = new Pianobar("/usr/local/bin/pianobar", ctlfile);
-        System.out.println("pianobar created");
-        Thread t = new Thread(pb);
-        System.out.println("thread created");
-        t.start();
-        System.out.println("thread started");
-        Thread.sleep(10);
-        System.out.println("choosing next song");
+        File ctlfile = new File("/home/jesusr/.config/pianobar/ctl");
+        PianobarControl pb = new PianobarControl(ctlfile);
+        System.out.println("Playing next song");
         pb.next();
         Thread.sleep(10);
+        System.out.println("Next song");
         pb.next();
         Thread.sleep(10);
+        System.out.println("Change to station 17");
         pb.changeStation("17");
+        System.out.println("quitting");
         pb.quit();
     }
 }
