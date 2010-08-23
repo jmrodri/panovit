@@ -11,6 +11,7 @@ JUNIT = ['junit:junit:jar:4.5', 'org.mockito:mockito-all:jar:1.8.5']
 
 EXPECTJ = ['net.sourceforge.expectj:expectj:jar:2.0.1', 'commons-logging:commons-logging:jar:1.1.1']
 
+GSTREAMER = ['org.gstreamer:gstreamer-java:jar:1.4']
 #############################################################################
 ## REPOSITORIES
 ##
@@ -38,12 +39,12 @@ define "panovit" do
   # building
   #
   compile.options.target = '1.6'
-  compile.with TIVOHME, EXPECTJ
+  compile.with TIVOHME, EXPECTJ, GSTREAMER
 
   #
   # testing
   #
-  test.with TIVOHME, JUNIT, EXPECTJ
+  test.with TIVOHME, JUNIT, EXPECTJ, GSTREAMER
 
   package(:jar)
 
