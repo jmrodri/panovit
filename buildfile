@@ -12,12 +12,15 @@ JUNIT = ['junit:junit:jar:4.5', 'org.mockito:mockito-all:jar:1.8.5']
 EXPECTJ = ['net.sourceforge.expectj:expectj:jar:2.0.1', 'commons-logging:commons-logging:jar:1.1.1']
 
 GSTREAMER = ['org.gstreamer:gstreamer-java:jar:1.4']
+
+localurl = "file:///usr/share/maven2/repository/JPP/jna-3.2.7.jar"
+JNA = download(artifact('jna:jna:jar:3.2.7')=>localurl)
 #############################################################################
 ## REPOSITORIES
 ##
 ## Specify Maven 2.0 remote repositories here, like this:
 repositories.remote << "http://jmrodri.fedorapeople.org/ivy/panovit"
-repositories.remote << "http://www.ibiblio.org/maven2/"
+repositories.remote << "http://www.ibiblio.org/maven2"
 
 desc "Pandora TiVo application"
 define "panovit" do
@@ -39,12 +42,12 @@ define "panovit" do
   # building
   #
   compile.options.target = '1.6'
-  compile.with TIVOHME, EXPECTJ, GSTREAMER
+  compile.with TIVOHME, EXPECTJ, GSTREAMER, JNA
 
   #
   # testing
   #
-  test.with TIVOHME, JUNIT, EXPECTJ, GSTREAMER
+  test.with TIVOHME, JUNIT, EXPECTJ, GSTREAMER, JNA
 
   package(:jar)
 
