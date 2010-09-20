@@ -17,6 +17,14 @@ import org.gstreamer.Pipeline;
 import org.gstreamer.State;
 import org.junit.Test;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 
 public class TestGstreamer {
 
@@ -39,17 +47,73 @@ public class TestGstreamer {
         lame.set("mode", "0");
         lame.set("vbr-quality", "6");
         
-        Element shout = ElementFactory.make("shout2send", "icecast");
-        shout.set("mount", "/pandora.mp3");
-        shout.set("port", "8000");
-        shout.set("password", "tivo");
-        shout.set("ip", "172.31.6.201");
+//        AppSink appsink = (AppSink) ElementFactory.make("appsink", "stream");
+//        Buffer buf = appsink.pullBuffer();
+        
+        Element file = ElementFactory.make("filesink", "buffer");
+        file.set("location", "/tmp/buffer.mp3");
+        
+//        Element shout = ElementFactory.make("shout2send", "icecast");
+//        shout.set("mount", "/pandora.mp3");
+//        shout.set("port", "8000");
+//        shout.set("password", "something");
+//        shout.set("ip", "192.168.1.201");
 
         
-        pipe.addMany(src, convert, lame, shout);
-        src.link(convert, lame, shout);
+        pipe.addMany(src, convert, lame, file);
+        src.link(convert, lame, file);
         pipe.setState(State.PLAYING);
         Gst.main();
         pipe.setState(State.NULL);
+    }
+    
+    public static class Read implements Runnable {
+
+        public void run() {
+            FileInputStream fr = null;
+            try {
+                fr = new FileInputStream(new File("/tmp/buffer.mp3"));
+                byte[] music = new byte[1024];
+                int i = 0;
+                while((i = fr.read(music)) > -1) {
+                    
+                    //System.out.println((char)i);
+                   // buf.append((char)i);
+                    if (':' == (char)i) {
+                        break;
+                    }
+                }
+                //System.out.println(buf.toString());
+                quit();
+            }
+            catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            finally {
+                try {
+                    if (fr != null) {
+                        fr.close();
+                    }
+                }
+                catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        public void quit() {
+            PrintWriter pw;
+            try {
+                pw = new PrintWriter(new BufferedOutputStream(new FileOutputStream("/tmp/pianobarinput")));
+                pw.println("q\n");
+                pw.close();
+            }
+            catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
     }
 }

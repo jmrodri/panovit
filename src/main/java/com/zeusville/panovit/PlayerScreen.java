@@ -4,6 +4,7 @@ import com.tivo.hme.bananas.BApplication;
 import com.tivo.hme.bananas.BButton;
 import com.tivo.hme.bananas.BScreen;
 import com.tivo.hme.bananas.BView;
+import com.tivo.hme.sdk.StreamResource;
 
 import java.awt.Color;
 
@@ -12,6 +13,7 @@ public class PlayerScreen extends BScreen {
     public PlayerScreen(BApplication app) {
         super(app);
         
+        StreamResource mp3 = createStream("file:///tmp/buffer.mp3", "audio/mpeg3", true);
         // create a "return to menu" button
         BButton button = new BButton(getNormal(), SAFE_TITLE_H, getNormal().getHeight() - SAFE_TITLE_H-30, 400, 30);
         button.setBarAndArrows(BAR_HANG, BAR_DEFAULT, "pop", null, H_UP, null, true);
